@@ -1,0 +1,189 @@
+﻿@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService AuthorizationService
+@using FcRoomBooking.Constants
+@{
+    Layout = "_LayoutAdmin";
+}
+@using FcRoomBooking.Models.Domain
+@model List<RoomBooking>
+<div class="col-lg-12 d-flex flex-column grid-margin stretch-card bg-white p-4 rounded relative">
+    <div class="d-flex justify-content-between">
+        <div class="d-flex w-25 align-items-center">
+            <div style=" width:130px;">
+                <span style="font-size:20px; font-weight:bold;">My Booking</span>
+            </div>
+            <div>
+                <div class="dropdown">
+                <button class="btn p-2 rounded-1 btn-info d-flex align-items-center" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Filter
+                        <span class="mdi mdi-filter"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li><button class="dropdown-item" type="button"><a asp-controller="MyBooking" asp-action="Index" asp-route-filter="">Show All</a></button></li>
+                        <li><button class="dropdown-item" type="button"><a asp-controller="MyBooking" asp-action="Index" asp-route-filter="Cancelled">Show Cancelled</a></button></li>
+                    <li><button class="dropdown-item" type="button"><a asp-controller="MyBooking" asp-action="Index" asp-route-filter="Finish">Show Finish</a></button></li>
+                        <li><button class="dropdown-item" type="button"><a asp-controller="MyBooking" asp-action="Index" asp-route-filter="Active">Show Active</a></button></li>
+                        <li><button class="dropdown-item" type="button"><a asp-controller="MyBooking" asp-action="Index" asp-route-filter="Ongoing">Show Ongoing</a></button></li>
+                </ul>
+            </div>
+            </div>
+        </div>
+        @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Booking.Create)).Result.Succeeded)
+        {
+            <a class="btn btn-outline-success float-right" asp-controller="MyBooking" asp-action="Create">Create New</a>
+        }
+    </div>
+    <div class="table-responsive pt-3">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>
+                        #
+                    </th>
+                    <th>
+                        Room Name
+                    </th>
+                    <th>
+                        Book By
+                    </th>
+                    <th>
+                        Subject
+                    </th>
+                    <th>
+                        Detail
+                    </th>
+                    <th>
+                        From
+                    </th>
+                    <th>
+                        To
+                    </th>
+                    <th>
+                        Status
+                    </th>
+                    <th>
+                        Action
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    int no = 1;
+                }
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @no
+                        </td>
+                        <td>
+                            @item.Room.RoomName
+                        </td>
+                        <td>
+                            @item.ApplicationUser.UserName
+                        </td>
+                        <td>
+                            @item.Subject
+                        </td>
+                        <td>
+                            @item.Detail
+                        </td>
+                        <td>
+                            @item.BookingFrom
+                        </td>
+                        <td>
+                            @item.BookingTo
+                        </td>
+                        <td>
+                            @{
+                                if (item.BookingStatus == "Active")
+                                {
+                                    <div class="badge badge-primary badge-pill">@item.BookingStatus</div>
+                                }
+                                else if (item.BookingStatus == "Ongoing")
+                                {
+                                    <div class="badge badge-success badge-pill">@item.BookingStatus</div>
+                                }
+                                else if (item.BookingStatus == "Finish")
+                                {
+                                    <div class="badge badge-info badge-pill">@item.BookingStatus</div>
+                                }
+                                else
+                                {
+                                    <div class="badge badge-danger badge-pill">@item.BookingStatus</div>
+                                }
+                            }
+                        </td>
+                        <td>
+                            @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Booking.Edit)).Result.Succeeded)
+                            {
+                               <a class="btn btn-outline-primary p-2" asp-controller="MyBooking" asp-action="Edit" asp-route-id="@item.Id">Edit</a>   
+                            }
+                            
+                            <a class="btn btn-outline-info p-2" asp-controller="MyBooking" asp-action="Participant" asp-route-id="@item.Id">Participant</a>
+                        </td>
+                    </tr>
+                    no++;
+                }
+            </tbody>
+        </table>
+
+    </div>
+</div>
+<partial name="_ChosenPartial" />
+
+@{
+    
+    if (TempData["isUpdated"] != null)
+    {
+        <script>
+            $.toast({
+                text: "Update Successfully!", // Text that is to be shown in the toast
+                heading: 'Edit Booking', // Optional heading to be shown on the toast
+                icon: 'info', // Type of toast icon
+                showHideTransition: 'fade', // fade, slide or plain
+                allowToastClose: true, // Boolean value true or false
+                hideAfter: 2000, // false to make it sticky or number representing the miliseconds as time after which toast needs to be hidden
+                stack: 5, // false if there should be only one toast at a time or a number representing the maximum number of toasts to be shown at a time
+                position: 'top-center', // bottom-left or bottom-right or bottom-center or top-left or top-right or top-center or mid-center or an object representing the left, right, top, bottom values
+                textAlign: 'left',  // Text alignment i.e. left, right or center
+                loader: true,  // Whether to show loader or not. True by default
+                loaderBg: '#9EC600',  // Background color of the toast loader
+            });
+        </script>
+    }
+    if (TempData["isCancel"] != null)
+    {
+        <script>
+            $.toast({
+                text: "Booking is Canceled!", // Text that is to be shown in the toast
+                heading: 'Cancel Booking', // Optional heading to be shown on the toast
+                icon: 'success', // Type of toast icon
+                showHideTransition: 'fade', // fade, slide or plain
+                allowToastClose: true, // Boolean value true or false
+                hideAfter: 2000, // false to make it sticky or number representing the miliseconds as time after which toast needs to be hidden
+                stack: 5, // false if there should be only one toast at a time or a number representing the maximum number of toasts to be shown at a time
+                position: 'top-center', // bottom-left or bottom-right or bottom-center or top-left or top-right or top-center or mid-center or an object representing the left, right, top, bottom values
+                textAlign: 'left',  // Text alignment i.e. left, right or center
+                loader: true,  // Whether to show loader or not. True by default
+                loaderBg: '#9EC600',  // Background color of the toast loader
+            });
+        </script>
+    }
+    if (TempData["isCreated"] != null)
+    {
+        <script>
+            $.toast({
+                text: "Create Successfully!", // Text that is to be shown in the toast
+                heading: 'Create Booking', // Optional heading to be shown on the toast
+                icon: 'success', // Type of toast icon
+                showHideTransition: 'fade', // fade, slide or plain
+                allowToastClose: true, // Boolean value true or false
+                hideAfter: 2000, // false to make it sticky or number representing the miliseconds as time after which toast needs to be hidden
+                stack: 5, // false if there should be only one toast at a time or a number representing the maximum number of toasts to be shown at a time
+                position: 'top-center', // bottom-left or bottom-right or bottom-center or top-left or top-right or top-center or mid-center or an object representing the left, right, top, bottom values
+                textAlign: 'left',  // Text alignment i.e. left, right or center
+            });
+        </script>
+    }
+}

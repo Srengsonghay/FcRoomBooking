@@ -1,0 +1,101 @@
+﻿@using Microsoft.AspNetCore.Identity;
+@*@public IEnumerable<IdentityRole>*@
+@model FcRoomBooking.Models.ViewModel.RoleViewModel
+<div id="modalWrapper">
+    @*@inject RoleManager<ApplicationRole> RoleManager*@
+</div>
+@{
+    Layout = "_LayoutAdmin";
+}
+
+
+<div class="col-lg-12 grid-margin stretch-card">
+              <div class="card">
+                  <partial name="_MessagePartail"></partial>
+                <div class="card-body">
+                  <h4 class="card-title">Role</h4>
+                  <div class="table-responsive">
+                      <form method="post" asp-action="AddRole" asp-controller="Role">
+                            <div class="input-group">
+                                <input name="roleName" class="form-control w-25">
+                                <span class="input-group-btn">
+                                    <button class="btn btn-info">Add New Role</button>
+                                </span>
+                            </div>
+                        </form>
+                    <table class="table table-striped">
+                      <thead>
+                        <tr>
+                          <th>
+                                Role
+                            </th>
+                            <th>
+                                Id
+                            </th>
+                            <th style="width:10%">
+                                Actions
+                            </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        @foreach (var role in Model.Roles)
+                            {
+                                <tr>
+                                    <td>
+                                        @role.Name
+                                    </td>
+                                    <td>
+                                        @role.Id
+                                    </td>
+                                    <td class="text-right">
+                                        <div class="btn-group">
+                                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                Action
+                                            </button>
+                                            <div class="dropdown-menu shadow animated--grow-in">
+                                                <a class="dropdown-item" asp-controller="Role" asp-action="EditRole" asp-route-roleid="@role.Id">
+                                                    <i class="fas fa-pencil-alt"></i> Edit
+                                                </a>
+                                                 
+                                                <form class="d-inline">
+                                                    @*<a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#RoleModal" data-url="@Url.Action($"GetRole/{role.Id}")">
+                                                        <i class="fas fa-trash-alt"></i> Delete</a>*@
+                                                    @*<a id="deleteItem" class="dropdown-item" data-target="#basic" data-toggle="modal" 
+                                                        data-path="@Url.Action("DeleteRole", "Role", new { id = @Model.Id })">Delete</a>*@
+                                                    
+                                                    
+                                                     
+                                                   
+                                                   
+                                                </form>
+                                                @if (role.Name != "Admin")
+                                                {
+                                                    <a style='margin-right:16px' asp-controller="Permission" asp-action="Index" asp-route-roleId="@role.Id" class="dropdown-item">
+                                                        <i class="fas fa-wrench"></i> Manage Permissions
+                                                    </a>
+                                                }
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            
+
+
+
+
+              
+           
+                
+            
+   
+ 
+
+            

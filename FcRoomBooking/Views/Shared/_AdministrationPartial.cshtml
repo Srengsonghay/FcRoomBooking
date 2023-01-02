@@ -1,0 +1,60 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using FcRoomBooking.Areas.Identity.Data
+
+@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService AuthorizationService
+@using FcRoomBooking.Constants
+
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@inject RoleManager<ApplicationRole> RoleManager
+
+
+@*@if (SignInManager.IsSignedIn(User))
+{
+                    
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="form-elements">
+                          <i class="icon-head menu-icon"></i>
+                          <span class="menu-title">User Mangement</span>
+                          @*<i class="menu-arrow"></i>
+                          
+                        </a>
+       
+            <div class="collapse" id="ui-basic">
+                          <ul class="nav flex-column sub-menu">
+                           <li class="nav-item"><a class="nav-link" asp-area="Identity" asp-page="/Account/Register">Set User</a></li>
+                           <li class="nav-item"><a class="nav-link" asp-area="Identity" asp-controller="Administration" asp-action="CreateRole">Set Role</a></li>
+                         </ul>
+                    </div>
+        
+
+                        
+                  </li>
+}*@
+@if (SignInManager.IsSignedIn(User))
+{
+    @if ((AuthorizationService.AuthorizeAsync(User, Permissions.User.View)).Result.Succeeded)
+    {
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="form-elements">
+                <i class="icon-head menu-icon"></i>
+                <span class="menu-title">User Mangement</span>
+                @*<i class="menu-arrow"></i>*@
+
+            </a>
+
+            <div class="collapse" id="ui-basic">
+                <ul class="nav flex-column sub-menu">
+                    <li class="nav-item"> <a class="nav-link" asp-controller="User" asp-action="Index">Users</a></li>
+                    <li class="nav-item"><a class="nav-link" asp-controller="Role" asp-action="Index">Roles</a></li>
+
+
+                </ul>
+            </div>
+        </li>
+    }
+}
+
+
+   

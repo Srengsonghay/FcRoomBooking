@@ -1,0 +1,150 @@
+﻿@using FcRoomBooking.Areas.Identity.Data
+@using Microsoft.AspNetCore.Identity
+@model FcRoomBooking.Models.ViewModel.ResponceViewModel
+@inject UserManager<ApplicationUser> userManager
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = "_LayoutAdmin";
+}
+<style>
+    p{
+        font-size: 22px;
+       
+        padding: 4px;
+    }
+    #align{
+        float:right;
+    }
+</style>
+
+        <div class="col-lg-12 grid-margin stretch-card">
+				<div class="card">
+				  <div class="card-body" >
+					<h4 class="card-title">
+						My Responce
+                @if(Model.Participant?.IsExcept == true || Model.Participant?.IsExcept ==false)
+                {
+                    <small>You are already responced to this meeting.</small>
+                }
+            </h4>
+                    <br />
+						<div class="row m-0 ">
+                            <div class="col-md-2 ">
+									<address>
+                                         <p class="font-weight-bold">Subject<span id="align">:</span></p>
+                                    </address>
+					        </div>
+                            <div class="col-md-10">
+									<address>
+                                         <p>@Model.RoomBooking?.Subject</p>
+                                    </address>
+					        </div>
+                            </div>
+                            <hr/>
+                            <div class="row">
+								  <div class="col-md-2">
+									<address>
+									  <p class="font-weight-bold">Invited By<span id="align">:</span></p>
+                                      <p class="font-weight-bold">Start From<span id="align">:</span></p>
+                                      <p class="font-weight-bold">Room<span id="align">:</span></p>
+                                      
+									</address>
+								  </div>
+								  <div class="col-md-4">
+									<address >
+                                        <p> @Model.RoomBooking?.ApplicationUser.Name </p>
+                                        <p> @Model.RoomBooking?.BookingFrom.ToString("MMM-dd-yyyy/ HH:MM tt")</p>
+                                        <p> @Model.RoomBooking?.Room.RoomName </p>
+                                       
+                                        
+                                        
+									  
+									  
+									</address>
+								  </div>
+                                  <div class="col-md-2">
+									<address>
+									  
+                                      <p class="font-weight-bold">Email<span id="align">:</span></p>
+                                      <p class="font-weight-bold">End<span id="align">:</span></p>
+									</address>
+								  </div>
+                                   <div class="col-md-4">
+									<address >
+                                         <address class="text-primary" style="margin:0; padding:0;">
+                                            <p class="font-weight-bold"> @Model.RoomBooking?.ApplicationUser?.Email </p>
+                                        </address>
+                                        <p> @Model.RoomBooking?.BookingTo.ToString("MMM-dd-yyyy/ HH:MM tt")</p>
+                                        
+									</address>
+								  </div>
+                          </div>
+                            @if(Model.RoomBooking?.Detail != null)
+                            {
+                                    <div class="row">
+                                          <div class="col-md-12">
+                                     
+                                                 <div class="card-body">
+                                                     <p class="font-weight-bold">Detail</p>
+                                                      <blockquote class="blockquote blockquote-primary">
+                                                        <p>@Model.RoomBooking.Detail</p>
+                                            
+                                                      </blockquote>
+                                                </div>
+                                          </div>
+                                      </div>
+                            }
+                            
+
+                          <div class="col-6 text-left">
+                             
+                             <form class="forms-sample" method="Post" asp-controller="RoomBooking" asp-action="accept">
+                                 <input type="hidden" asp-for="Participant.UserId" value="@userManager.GetUserId(User)" />
+                                 <input type="hidden" asp-for="RoomBooking.Id" />
+                                 <input type="hidden" asp-for="Participant.IsExcept" value="true"/>
+                                 <button type="submit" class="btn btn-success" >Join</button>
+                                 <a class="btn btn-danger" asp-controller="RoomBooking" data-bs-toggle="modal" data-bs-target="#ResponceModal">Reject</a>
+                                 <a class="btn btn-secondary" asp-controller="RoomBooking" asp-action="Index">Cancle</a>
+                             </form>
+                            @*<a class="btn btn-success" asp-controller="RoomBooking" asp-action="accept" asp-route-Id="@Model.Id">Join</a>*@
+                            
+                        </div>
+
+				  </div>
+				</div>
+			  </div>
+              
+        <div class="modal fade" id="ResponceModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Comfirmation</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                  <form class="forms-sample" method="Post" asp-controller="RoomBooking" asp-action="accept">
+                        <div class="form-group">
+                            <input type="hidden" asp-for="Participant.UserId" value="@userManager.GetUserId(User)" />
+                            <input type="hidden" asp-for="RoomBooking.Id" /> 
+                            <input type="hidden" asp-for="Participant.IsExcept" value="false"/>
+                            <label for="exmpleTexarea1">Why you can't join with us?</label>
+                            @*<input type="text" asp-for="Participant.Reason" class="form-control" id="exmpleTexarea1" row="4"/> *@
+                            <textarea asp-for="Participant.Reason" class="form-control" id="exmpleTexarea1" row="5" required></textarea>
+                            <span asp-validation-for="Participant.Reason" class="text-danger"></span>
+                        </div>
+                       @* <button type="submit" class="btn btn-success" asp-controller="RoomBooking" asp-action="accept" asp-route-id="@Model.RoomBooking.Id">Join</button>*@
+                        <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary" >Submit</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        
+                
+                      </div>
+                 
+                  </form>
+              </div>
+            </div>
+          </div>
+        </div>
+        <partial name="_ValidationScriptsPartial" />

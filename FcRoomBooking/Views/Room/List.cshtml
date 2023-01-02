@@ -1,0 +1,64 @@
+﻿@using FcRoomBooking.Constants
+@model List<FcRoomBooking.Models.Domain.Room>
+@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService AuthorizationService
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = "_LayoutAdmin";
+}
+<style>
+    .cart-footer{
+        margin-left: 30px;
+        margin-bottom: 10px;
+    }
+</style>
+<div class="col-12 grid-margin mb-1 stretch-card">
+              <div class="card">
+                <div class="card-body">
+                    <div class="row pt-4">
+                        <div class="col-6">
+                            <h2 class="card-title">Room</h2>
+                        </div>  
+                        <div class="col-6 text-right" >
+                    @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Room.Create)).Result.Succeeded)
+                    {
+                        <a asp-controller="Room" asp-action="Create" class="btn btn-success">Add Room </a>
+                    }
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+</div>
+@foreach (var room in Model)
+{
+    <div class="col-lg-6 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body ">
+                  <h4 class="card-title">@room.RoomName</h4>
+                   @{
+                       var base64 = Convert.ToBase64String(room.RoomImage);
+                       var img = string.Format("data:image/gif;base64,{0}", base64);
+                   }
+                   <div style="margin:10px;text-align:center;">
+                       <img src="@img" style="width: 300px; height:200px;">
+                   </div>
+                   
+                </div>
+                <div class="cart-footer">
+                   
+                    <div class="cart-desc">
+                         <h5><p>@room.RoomDescription</p></h5>
+                    </div>
+                     @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Room.Edit)).Result.Succeeded)
+                {
+                    <a href="Edit/@room.Id"><button class="btn btn-outline-info btn-fw">Edit</button></a>
+                }
+            </div>
+                
+                
+              </div>
+            </div>
+}

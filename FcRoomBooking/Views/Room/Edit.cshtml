@@ -1,5 +1,47 @@
-﻿@*
+﻿@using FcRoomBooking.Constants
+@model FcRoomBooking.Models.Domain.Room
+@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService AuthorizationService
+@*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @{
+    Layout = "_LayoutAdmin";
 }
+<div class="col-12 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body">
+                  <h4 class="card-title">Update Room</h4>
+                  <form class="forms-sample" enctype="multipart/form-data" method="Post" action="Edit">
+                      <input type="hidden" class="form-control" id="exampleInputUsername1" asp-for="Id" placeholder="Name">
+                      
+                    <div class="form-group">
+                      <label for="exampleInputUsername1">Room Name</label>
+                      <input type="text" class="form-control" id="exampleInputUsername1" asp-for="RoomName" placeholder="Name">
+                      <span asp-validation-for="RoomName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                      <label for="exampleInputEmail1">Description</label>
+                      <input type="textarea" class="form-control" id="exampleInputTextArea" asp-for="RoomDescription" placeholder="Description">
+                      <span asp-validation-for="RoomDescription"></span>
+                    </div>
+                    <div class="form-group">
+                      <label>Room Image upload</label>
+                      <input type="file" name="img[]" class="file-upload-default">
+                      <div class="input-group col-xs-12">
+                        <input type="file" class="form-control file-upload-info" asp-for="image" placeholder="Upload Image" >
+                        <span class="input-group-append">
+                          <button class="file-upload-browse btn btn-primary" type="button">Upload</button>
+                        </span>
+                      </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary mr-2">Update</button>
+                @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Room.Delete)).Result.Succeeded)
+                {
+                    <button type="submit" asp-controller="Room" asp-action="Delete" class="btn btn-danger">Delete</button>
+                }
+                <a asp-controller="Room" asp-action="List" class="btn btn-light">Cancle</a>
+                  </form>
+                </div>
+              </div>
+            </div>

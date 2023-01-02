@@ -1,0 +1,116 @@
+﻿@{
+    Layout = "_LayoutAdmin";
+}
+@model FcRoomBooking.Models.ViewModel.RoomBookingViewModel
+<div class="col-lg-12 d-flex flex-column grid-margin stretch-card bg-white p-4 rounded shadow-sm">
+    <div class="card-body">
+        <h4 class="card-title mb-5">Create Room Booking</h4>
+        
+        <form class="forms-sample" asp-controller="MyBooking" asp-action="Post" method="post" autocomplete="off" enctype="multipart/form-data">
+            <div class="form-group row">
+                <div class="col-md-6">
+                    <label for="exampleInputUsername1">Book By</label>
+                    <input type="text" class="form-control" id="exampleInputUsername1" asp-for="UserName" value="@User.Identity.Name" disabled>
+                </div>
+                <div class="col-md-6">
+                    <label for="exampleInputUsername1">Room Name</label>
+                    <select class="form-control selectList" asp-items="@ViewBag.roomList" asp-for="RoomId" required>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-md-6 d-flex justify-content-around p-0">
+                    <div class="col-md-6">
+                        <label for="exampleInputUsername1">Booking From</label>
+                        <input type="date" class="form-control" asp-for="BookingFrom" id="exampleInputUsername1" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="exampleInputUsername1">Time</label>
+                        <select class="form-control selectList"  asp-items="@ViewBag.TimeList" asp-for="BookingFromTime" required >
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-6 d-flex justify-content-around p-0">
+                    <div class="col-md-6">
+                        <label for="exampleInputUsername1">Booking To</label>
+                        <input type="date" class="form-control" id="exampleInputUsername1" asp-for="BookingTo" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="exampleInputUsername1">Time</label>
+                        <select class="form-control selectList" asp-items="@ViewBag.TimeList" asp-for="BookingToTime" required>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-group row">
+                <div class="col-md-6">
+                    <label for="exampleInputUsername1">Subject</label>
+                <input type="text" class="form-control" id="exampleInputUsername1" asp-for="Subject" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="exampleInputUsername1">Invite Participant</label>
+                    <select class="form-control selectList" asp-items="@ViewBag.partList" multiple asp-for="participantViewModel.ParticipantId" required>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="exampleInputUsername1">Detail</label>
+                <textarea class="form-control" style="height:100px" id="exampleInputUsername1" asp-for="Detail" required></textarea>
+            </div>
+           
+                    <button type="submit" class="btn btn-primary mr-2">Submit</button>
+                    <a class="btn btn-light" asp-controller="MyBooking" asp-action="index">Cancel</a>
+            
+        </form>
+    </div>
+</div>
+
+<div class="modal fade" id="exampleModal" tabindex="-1">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Invite Participant</h5>
+                <button type="button" class="btn p-0" style="font-size:25px!important" data-bs-dismiss="modal">
+                    <span class="mdi mdi-close" ></span>
+                </button>
+            </div>
+            <form asp-controller="MyBooking" asp-action="PostParticipant" method="post" asp-route-id="@ViewBag.BookingId">
+
+                <div class="modal-body">
+                    <label for="exampleInputUsername1">Participant</label>
+                    <select class="form-control selectList" name="ParticipantId" multiple asp-items="@ViewBag.partList" required>
+                    </select>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Invite</button>
+                </div>
+            </form>
+
+
+        </div>
+    </div>
+</div>
+
+<partial name="_ChosenPartial" />
+@{
+    
+    if (TempData["notAvailable"] != null)
+    {
+        <script>
+            $.toast({
+                text: "Room Not Available!", // Text that is to be shown in the toast
+                heading: 'Create Fail', // Optional heading to be shown on the toast
+                icon: 'error', // Type of toast icon
+                showHideTransition: 'fade', // fade, slide or plain
+                allowToastClose: true, // Boolean value true or false
+                hideAfter: 3000, // false to make it sticky or number representing the miliseconds as time after which toast needs to be hidden
+                stack: 5, // false if there should be only one toast at a time or a number representing the maximum number of toasts to be shown at a time
+                position: 'top-center', // bottom-left or bottom-right or bottom-center or top-left or top-right or top-center or mid-center or an object representing the left, right, top, bottom values
+                textAlign: 'left',  // Text alignment i.e. left, right or center
+            });
+        </script>
+    }
+}

@@ -10,17 +10,17 @@ namespace FcRoomBooking.Models.Domain
         public int Id { get; set; }
         [ForeignKey("Room")]
         public int RoomId { get; set; }
-        public Room Room { get; set; }
+        public Room? Room { get; set; }
         [ForeignKey("ApplicationUser")]
-        public string UserId { get; set; }
-        public ApplicationUser ApplicationUser { get; set; }
+        public string? UserId { get; set; }
+        public ApplicationUser? ApplicationUser { get; set; }
         public string Subject { get; set; }
         public string? Detail { get; set; }
         public DateTime BookingFrom { get; set; }
         public DateTime BookingTo { get; set; }
-        public string BookingStatus { get; set; }
+        public string? BookingStatus { get; set; }
         [NotMapped]
         public List<Participant> Participant { get; set; }
-        
+
     }
 }

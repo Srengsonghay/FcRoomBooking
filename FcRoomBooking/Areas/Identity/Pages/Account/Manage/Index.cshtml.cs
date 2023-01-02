@@ -30,7 +30,10 @@ namespace FcRoomBooking.Areas.Identity.Pages.Account.Manage
         ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
         ///     directly from your code. This API may change or be removed in future releases.
         /// </summary>
-        public string Username { get; set; }
+        //public string Username { get; set; }
+        public Byte[] ProfileImage { get; private set; }
+        public IFormFile Image { get; private set; }
+        public string Name { get; set; }
 
         /// <summary>
         ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
@@ -59,19 +62,32 @@ namespace FcRoomBooking.Areas.Identity.Pages.Account.Manage
             [Phone]
             [Display(Name = "Phone number")]
             public string PhoneNumber { get; set; }
+            public Byte[]? ProfileImage { get; set; }
+            [BindProperty]
+            public IFormFile Image { get; set; }
+            public string UserName { get; set; }
+            [Display(Name = "Username")]
+            public string Name { get; set; }
         }
 
         private async Task LoadAsync(ApplicationUser user)
         {
-            var userName = await _userManager.GetUserNameAsync(user);
+            //var userName = await _userManager.GetUserNameAsync(user);
+           
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
+            var profileImage = user.ProfileImage;
+            var name = user.Name;
 
-            Username = userName;
+            //Username = userName;
+            ProfileImage = profileImage;
 
             Input = new InputModel
             {
-                PhoneNumber = phoneNumber
-            };
+                PhoneNumber = phoneNumber,
+                Name = name,
+                Image = Image,
+                ProfileImage = profileImage
+        };
         }
 
         public async Task<IActionResult> OnGetAsync()
@@ -99,7 +115,38 @@ namespace FcRoomBooking.Areas.Identity.Pages.Account.Manage
                 await LoadAsync(user);
                 return Page();
             }
+            if (Request.Form.Files.Count > 0)
+            {
+                IFormFile file = Request.Form.Files.FirstOrDefault();
+                using (var dataStream = new MemoryStream())
+                {
+                    await file.CopyToAsync(dataStream);
+                    user.ProfileImage = dataStream.ToArray();
+                }
+                await _userManager.UpdateAsync(user);
+            }
 
+            //if (user.Image.Length > 0)
+            //{
+            //    using (var stream = new MemoryStream())
+            //    {
+            //        await user.Image.CopyToAsync(stream);
+            //        user.ProfileImage = stream.ToArray();
+            //    }
+            //    await _userManager.UpdateAsync(user);
+            //}
+            var Name = Input.Name;
+            if (string.IsNullOrEmpty(Name))
+            {
+                StatusMessage = "Invalid Input UserName.";
+                return RedirectToPage();
+            }
+            else
+            {
+                user.Name = Name;
+                await _userManager.UpdateAsync(user);
+            }
+            
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
             if (Input.PhoneNumber != phoneNumber)
             {

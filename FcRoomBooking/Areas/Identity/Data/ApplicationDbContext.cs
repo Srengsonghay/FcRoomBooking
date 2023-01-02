@@ -16,9 +16,20 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<RoomBooking> RoomBookings { get; set; }
     public DbSet<Participant> Participants { get; set; }
     public DbSet<RoomStatus> RoomStatus { get; set; }
+    public DbSet<ApplicationRole> ApplicationRole { get; set; }
+    public DbSet<ApplicationUser> ApplicationUser { get; set; }
+    public DbSet<Email> Email { get; set; }
+    public DbSet<AddUser> AddUser { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
+        //builder.Entity<Participant>()
+        //    .HasKey(t => new { t.UserId, t.RoomBookingId });
+        //builder.Entity<Participant>()
+        //    .HasOne(pt => pt.RoomBooking)
+        //    .WithMany(p => p.Participant)
+        //    .HasForeignKey(p => p.RoomBookingId);
+
         base.OnModelCreating(builder);
         // Customize the ASP.NET Identity model and override the defaults if needed.
         // For example, you can rename the ASP.NET Identity table names and more.

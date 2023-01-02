@@ -7,13 +7,15 @@ namespace FcRoomBooking.Models.Domain
     {
         [Key]
         public int Id { get; set; }
-        public string RoomName { get; set; } 
+        public string? RoomName { get; set; }
         public string? RoomCapacity { get; set; }
         public string? RoomDescription { get; set; }
         public byte[]? RoomImage { get; set; }
         [ForeignKey("RoomStatus")]
         public int? RoomStatusId { get; set; }
-        public RoomStatus RoomStatus { get; set; }
+        public RoomStatus? RoomStatus { get; set; }
+        [NotMapped]
+        public IFormFile? image { get; set; }
 
     }
 }

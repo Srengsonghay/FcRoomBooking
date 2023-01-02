@@ -1,11 +1,17 @@
 ﻿@{
     Layout = "_LayoutAdmin";
 }
-
+@using FcRoomBooking.Models.Domain
+@using Microsoft.AspNetCore.Identity
+@using FcRoomBooking.Areas.Identity.Data
+@model FcRoomBooking.Models.ViewModel.CheckBookingViewModel
+@inject UserManager<ApplicationUser> UserManager
+@{
+    var user = UserManager.GetUserId(User);
+}
 <div class="col-lg-12 d-flex flex-column grid-margin stretch-card bg-white p-4 rounded relative">
     <div>
         <span style="font-size:20px; font-weight:bold">Booking</span>
-        <a class="btn btn-outline-success float-right" asp-controller="Admin" asp-action="CreateRoomBooking">Create New</a>
     </div>
     <div class="table-responsive pt-3">
         <table class="table table-bordered">
@@ -44,38 +50,80 @@
                 @{
                     int no = 1;
                 }
-                <tr>
-                    <td>
-                        @no
-                    </td>
-                    <td>
-                        @no
-                    </td>
-                    <td>
-                        @no
-                    </td>
-                    <td>
-                        @no
-                    </td>
-                    <td>
-                        @no
-                    </td>
-                    <td>
-                        @no
-                    </td>
-                    <td>
-                        @no
-                    </td>
-                    <td>
-                        @no
-                    </td>
-                    <td>
-                        <a class="btn btn-outline-primary p-2" asp-controller="RoomBooking" asp-action="Edit">Edit</a>
-                        <a class="btn btn-outline-info p-2" asp-controller="Payment" asp-action="Show">View</a>
-                    </td>
-                </tr>
+                @foreach (var item in Model.RoomBooking)
+                {
+                   
+                        
+                    
+                    <tr>
+                        <td>
+                            @no
+                        </td>
+                        <td>
+                            @item.Room.RoomName
+                        </td>
+                        <td>
+                            @item.ApplicationUser.UserName
+                        </td>
+                        <td>
+                            @item.Subject
+                        </td>
+                        <td>
+                            @item.Detail
+                        </td>
+                        <td>
+                            @item.BookingFrom
+                        </td>
+                        <td>
+                            @item.BookingTo
+                        </td>
+                        <td>
+                            @{
+                                if(item.BookingStatus == "Active")
+                                {
+                                        <div class="badge badge-primary badge-pill">@item.BookingStatus</div>
+                                }
+                                else if(item.BookingStatus == "Ongoing")
+                                {
+                                        <div class="badge badge-success badge-pill">@item.BookingStatus</div>
+                                }
+                                else if(item.BookingStatus == "Finish")
+                                {
+                                        <div class="badge badge-info badge-pill">@item.BookingStatus</div>
+                                }
+                                else
+                                {
+                                        <div class="badge badge-danger badge-pill">@item.BookingStatus</div>
+                                }
+                            }
+                        </td>
+                        <td>
+                            <a class="btn btn-outline-success p-2 mb-1" asp-controller="RoomBooking" asp-action="Participant" asp-route-id="@item.Id">Participant</a>
+                             @foreach(var person in Model.Participant)
+                             {
+                                @if(user == person.UserId && person.RoomBookingId == item.Id){
+                                    @if(person.IsExcept != null)
+                                    {
+                                        <br>
+                                        <a class="btn btn-outline-info p-2" asp-controller="RoomBooking" asp-action="Responce" asp-route-id="@item.Id">Responce</a>
+                                    }
+                                    else
+                                    {
+                                        <br>
+                                        <a class="btn btn-outline-warning p-2" asp-controller="RoomBooking" asp-action="Responce" asp-route-id="@item.Id">Responce</a>
+                                    }
+
+                        }
+                            }
+                            
+                        </td>
+                    </tr>
+                    
+                    no++;
+                }
             </tbody>
         </table>
 
     </div>
 </div>
+<partial name="_MessagePartail" />

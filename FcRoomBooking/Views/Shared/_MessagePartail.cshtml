@@ -1,0 +1,46 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@if (ViewBag.Message != null)
+{
+    var type = @ViewBag.type;
+    <div class="alert alert-@type alert-dismissible" role="alert">
+        <button type="hidden" data-bs-dismiss="alert"></button>
+      @ViewBag.Message
+    </div>
+}
+<partial name="_ChosenPartial" />
+@{
+    if (TempData["notAvailable"] != null)
+    {
+        <script>
+            $.toast({
+                text: "Meeting Rejected!", // Text that is to be shown in the toast
+                heading: 'You are refused to join the meeting', // Optional heading to be shown on the toast
+                icon: 'error', // Type of toast icon
+                showHideTransition: 'fade', // fade, slide or plain
+                allowToastClose: true, // Boolean value true or false
+                hideAfter: 3000, // false to make it sticky or number representing the miliseconds as time after which toast needs to be hidden
+                stack: 5, // false if there should be only one toast at a time or a number representing the maximum number of toasts to be shown at a time
+                position: 'top-center', // bottom-left or bottom-right or bottom-center or top-left or top-right or top-center or mid-center or an object representing the left, right, top, bottom values
+                textAlign: 'left',  // Text alignment i.e. left, right or center
+            });
+        </script>
+    }
+    if (TempData["isJoin"] != null)
+    {
+        <script>
+            $.toast({
+                text: "Joinned Comfirm!", // Text that is to be shown in the toast
+                heading: 'You have joinned the meeting', // Optional heading to be shown on the toast
+                icon: 'success', // Type of toast icon
+                showHideTransition: 'fade', // fade, slide or plain
+                allowToastClose: true, // Boolean value true or false
+                hideAfter: 2000, // false to make it sticky or number representing the miliseconds as time after which toast needs to be hidden
+                stack: 5, // false if there should be only one toast at a time or a number representing the maximum number of toasts to be shown at a time
+                position: 'top-center', // bottom-left or bottom-right or bottom-center or top-left or top-right or top-center or mid-center or an object representing the left, right, top, bottom values
+                textAlign: 'left',  // Text alignment i.e. left, right or center
+            });
+        </script>
+    }
+}

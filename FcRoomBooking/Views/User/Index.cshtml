@@ -1,0 +1,160 @@
+﻿@using FcRoomBooking.Constants
+@using Microsoft.AspNetCore.Identity;
+@inject IAuthorizationService AuthorizationService
+@using Microsoft.AspNetCore.Authorization
+@{
+    Layout = "_LayoutAdmin";
+}
+@*@model IEnumerable<IdentityUser>*@
+@model List<FcRoomBooking.Areas.Identity.Data.ApplicationUser>
+<div class="col-12 grid-margin mb-1 stretch-card">
+              <div class="card">
+                <div class="card-body">
+                    <div class="row pt-4">
+                        <div class="col-6">
+                            <h2 class="card-title">User List</h2>
+                        </div>  
+                        <div class="col-6 text-right" >
+                            @if ((AuthorizationService.AuthorizeAsync(User, Permissions.User.Create)).Result.Succeeded)
+                             {
+                            <a class="nav-link" asp-area="Identity" asp-page="/Account/Register">Create User</a>
+                             }
+                        </div>
+                    </div>
+                </div>
+            </div>
+</div>
+
+<div class="col-lg-12 d-flex flex-column grid-margin stretch-card bg-white p-4 rounded relative">
+    <div class="table-responsive pt-3">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>
+                        #
+                    </th>
+                    <th>
+                        Profile
+                    </th>
+                    <th>
+                        UserName
+                    </th>
+                    <th>
+                        Email
+                    </th>
+                    <th>
+                        Action
+                    </th>     
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    int no = 1;
+                }
+                @foreach (var user in Model)
+                {
+                    <tr>
+                        <td>
+                            @no
+                        </td>
+                        <td>
+                            <a>
+                                @if(user.ProfileImage != null)
+                                {
+                                    <img src="data:image/*;base64,@(Convert.ToBase64String(user.ProfileImage))">
+                                }
+                                else
+                                {
+                                    <img src="https://cdn-icons-png.flaticon.com/512/456/456212.png">
+                                }
+
+                                
+                            </a>
+                        </td>
+                        <td>
+                            <div class="row">
+                                <div class="col-sm">
+                                    <a>
+                                        @user.UserName
+                                    </a>
+                                    <br>
+                                    <small>
+                                        @user.Id
+                                    </small>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <a>
+                                @user.Email
+                            </a>
+                        </td>
+                        <td>
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Action
+                                </button>
+                                <div class="dropdown-menu shadow animated--grow-in">
+                                    <a style='margin-right:16px' asp-controller="UserRoles" asp-action="Index" asp-route-userId="@user.Id" class="dropdown-item">
+                                        <i class="fas fa-wrench"></i> Manage Roles
+                                    </a>
+                                    @if ((AuthorizationService.AuthorizeAsync(User, Permissions.User.Edit)).Result.Succeeded)
+                                    {
+                                        <a style='margin-right:16px' asp-controller="User" asp-action="Edit" asp-route-userId="@user.Id" class="dropdown-item">
+                                        <i class="fas fa-wrench"></i> Edit
+                                        </a>    
+                                    }
+                                    
+                                </div>
+                                    
+                                
+                                
+                                
+                                
+                            </div>
+                        </td>
+                    </tr>
+                    no++;
+                }
+            </tbody>
+        </table>
+
+    </div>
+</div>
+<partial name="_ChosenPartial" />
+@{
+    if (TempData["notAvailable"] != null)
+    {
+        <script>
+            $.toast({
+                text: "User has been deleted!", // Text that is to be shown in the toast
+                heading: ' User Deleted', // Optional heading to be shown on the toast
+                icon: 'error', // Type of toast icon
+                showHideTransition: 'fade', // fade, slide or plain
+                allowToastClose: true, // Boolean value true or false
+                hideAfter: 3000, // false to make it sticky or number representing the miliseconds as time after which toast needs to be hidden
+                stack: 5, // false if there should be only one toast at a time or a number representing the maximum number of toasts to be shown at a time
+                position: 'top-center', // bottom-left or bottom-right or bottom-center or top-left or top-right or top-center or mid-center or an object representing the left, right, top, bottom values
+                textAlign: 'left',  // Text alignment i.e. left, right or center
+            });
+        </script>
+    }
+    if (TempData["isUpdated"] != null)
+    {
+        <script>
+            $.toast({
+                text: "User has been Updated!", // Text that is to be shown in the toast
+                heading: 'User Updated', // Optional heading to be shown on the toast
+                icon: 'info', // Type of toast icon
+                showHideTransition: 'fade', // fade, slide or plain
+                allowToastClose: true, // Boolean value true or false
+                hideAfter: 2000, // false to make it sticky or number representing the miliseconds as time after which toast needs to be hidden
+                stack: 5, // false if there should be only one toast at a time or a number representing the maximum number of toasts to be shown at a time
+                position: 'top-center', // bottom-left or bottom-right or bottom-center or top-left or top-right or top-center or mid-center or an object representing the left, right, top, bottom values
+                textAlign: 'left',  // Text alignment i.e. left, right or center
+                loader: true,  // Whether to show loader or not. True by default
+                loaderBg: '#9EC600',  // Background color of the toast loader
+            });
+        </script>
+    }
+}

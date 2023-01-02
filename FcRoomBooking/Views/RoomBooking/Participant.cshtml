@@ -1,0 +1,78 @@
+﻿@{
+    Layout = "_LayoutAdmin";
+}
+@using FcRoomBooking.Models.ViewModel
+@model List<ParticipantViewModel>
+<div class="col-lg-12 d-flex flex-column grid-margin stretch-card bg-white p-4 rounded relative">
+    <div>
+        <span style="font-size:20px; font-weight:bold">Booking</span>
+    </div>
+    <div class="table-responsive pt-3">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>
+                        #
+                    </th>
+                    <th>
+                        UserName
+                    </th>
+                    <th>
+                        Email
+                    </th>
+                   <th>
+                        Status
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    int no = 1;
+                }
+                @if (Model != null)
+                {
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @no
+                            </td>
+                            <td>
+                                @item.Username
+                            </td>
+                            <td>
+                                @item.Email
+                            </td>
+                            <td>
+                                @if(item.IsExcept == true)
+                                {
+                                    <div class="badge badge-success badge-pill">Participated</div>
+                                }
+                                else if(item.IsExcept == false)
+                                {
+                                     <a href="#"  data-bs-toggle="modal" data-bs-target="@("#DetailTeam-"+item.Id)"><div class="badge badge-warning badge-pill">Not Avilable</div></a>
+                                    @* <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="@("#DetailTeam-"+item.Id)">Detail</button>*@
+                                     @await Html.PartialAsync("_ReasonPartialView", item)
+                                }
+                                else
+                                {
+                                   <div class="badge badge-secondary badge-pill">No Responce</div>
+                                }
+                                
+                            </td>
+                            
+                        </tr>
+                        no++;
+                    }
+
+                }
+                else
+                {
+
+                }
+
+            </tbody>
+        </table>
+
+    </div>
+</div>

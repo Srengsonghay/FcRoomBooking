@@ -1,4 +1,5 @@
-﻿using FcRoomBooking.Models;
+﻿using FcRoomBooking.Areas.Identity.Data;
+using FcRoomBooking.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -28,5 +29,6 @@ namespace FcRoomBooking.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
     }
 }

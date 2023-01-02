@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿
+
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -7,16 +9,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Skydash Admin</title>
     <!-- plugins:css -->
-    <link rel="stylesheet" href="~/vendors/feather/feather.css">
-    <link rel="stylesheet" href="~/vendors/ti-icons/css/themify-icons.css">
-    <link rel="stylesheet" href="~/vendors/css/vendor.bundle.base.css">
     <link rel="stylesheet" href="~/vendors/mdi/css/materialdesignicons.min.css" />
+    <link rel="stylesheet" href="~/Scripts/chosen/chosen.min.css"/>
     <!-- endinject -->
     <!-- Plugin css for this page -->
     <link rel="stylesheet" href="~/admin_js/lib/main.css" />
-    <link rel="stylesheet" href="~/vendors/datatables.net-bs4/dataTables.bootstrap4.css">
-    <link rel="stylesheet" href="~/vendors/ti-icons/css/themify-icons.css">
-    <link rel="stylesheet" type="text/css" href="~/admin_js/select.dataTables.min.css">
+    @*<link rel="stylesheet" href="~/vendors/datatables.net-bs4/dataTables.bootstrap4.css">
+    <link rel="stylesheet" href="~/vendors/ti-icons/css/themify-icons.css">*@
+    @*<link rel="stylesheet" type="text/css" href="~/admin_js/select.dataTables.min.css">*@
+    <link rel="stylesheet" href="~/lib/toast/jquery.toast.min.css" />
+
 
     <!-- End plugin css for this page -->
     <!-- inject:css -->
@@ -29,8 +31,8 @@
     <div class="container-scroller">
         <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
             <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
-                <a class="navbar-brand brand-logo mr-5" href="index.html"><img src="/images/logo.svg" class="mr-2" alt="logo" /></a>
-                <a class="navbar-brand brand-logo-mini" href="index.html"><img src="/images/logo-mini.svg" alt="logo" /></a>
+                <a class="navbar-brand brand-logo mr-5" asp-controller="Admin" asp-action="Index"><img src="/images/logo.svg" class="mr-2" alt="logo" /></a>
+                <a class="navbar-brand brand-logo-mini" asp-controller="Admin" asp-action="Index"><img src="/images/logo-mini.svg" alt="logo" /></a>
             </div>
             <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
                 <ul class="navbar-nav mr-lg-2">
@@ -46,55 +48,8 @@
                     </li>
                 </ul>
                 <ul class="navbar-nav navbar-nav-right">
-                    @*<li class="nav-item dropdown">
-                        <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown" href="#" data-toggle="dropdown">
-                            <i class="icon-bell mx-0"></i>
-                            <span class="count"></span>
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="notificationDropdown">
-                            <p class="mb-0 font-weight-normal float-left dropdown-header">Notifications</p>
-                            <a class="dropdown-item preview-item">
-                                <div class="preview-thumbnail">
-                                    <div class="preview-icon bg-success">
-                                        <i class="ti-info-alt mx-0"></i>
-                                    </div>
-                                </div>
-                                <div class="preview-item-content">
-                                    <h6 class="preview-subject font-weight-normal">Application Error</h6>
-                                    <p class="font-weight-light small-text mb-0 text-muted">
-                                        Just now
-                                    </p>
-                                </div>
-                            </a>
-                            <a class="dropdown-item preview-item">
-                                <div class="preview-thumbnail">
-                                    <div class="preview-icon bg-warning">
-                                        <i class="ti-settings mx-0"></i>
-                                    </div>
-                                </div>
-                                <div class="preview-item-content">
-                                    <h6 class="preview-subject font-weight-normal">Settings</h6>
-                                    <p class="font-weight-light small-text mb-0 text-muted">
-                                        Private message
-                                    </p>
-                                </div>
-                            </a>
-                            <a class="dropdown-item preview-item">
-                                <div class="preview-thumbnail">
-                                    <div class="preview-icon bg-info">
-                                        <i class="ti-user mx-0"></i>
-                                    </div>
-                                </div>
-                                <div class="preview-item-content">
-                                    <h6 class="preview-subject font-weight-normal">New user registration</h6>
-                                    <p class="font-weight-light small-text mb-0 text-muted">
-                                        2 days ago
-                                    </p>
-                                </div>
-                            </a>
-                        </div>
-                    </li>*@
-                    <partial name="_LoginPartial" />
+                    <partial name="_NotificationPartial"/>
+                    <partial name="_LoginPartialFirst" />
                 </ul>
                 <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
                     <span class="icon-menu"></span>
@@ -115,22 +70,29 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link gap-2 d-flex" asp-controller="RoomBooking" asp-action="Index">
+                        <a class="nav-link gap-2 d-flex" asp-controller="RoomBooking" asp-action="Index" asp-route-id="">
                             <i class="mdi mdi-book" style="font-size:large"></i>
                             <span class="menu-title ml-2">RoomBooking</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link gap-2 d-flex" asp-controller="Room" asp-action="Index">
+                        <a class="nav-link gap-2 d-flex" asp-controller="MyBooking" asp-action="Index">
+                            <i class="mdi mdi-book" style="font-size:large"></i>
+                            <span class="menu-title ml-2">My Booking</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link gap-2 d-flex" asp-controller="Room" asp-action="List">
                             <i class="mdi mdi-view-dashboard" style="font-size:large"></i>
                             <span class="menu-title ml-2">Room</span>
                         </a>
                     </li>
+                    <partial name="_AdministrationPartial" />
                 </ul>
             </nav>
             <!-- partial -->
             <div class="main-panel">
-                <div class="content-wrapper">
+                <div class="content-wrapper" style="padding:30px">
                     <div class="row">
                         @RenderBody()
                     </div>
@@ -158,9 +120,6 @@
     <!-- endinject -->
     <!-- Plugin js for this page -->
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/vendors/chart.js/Chart.min.js"></script>
-    <script src="~/vendors/datatables.net/jquery.dataTables.js"></script>
-    <script src="~/vendors/datatables.net-bs4/dataTables.bootstrap4.js"></script>
     <script src="~/admin_js/dataTables.select.min.js"></script>
 
     <!-- End plugin js for this page -->
@@ -170,15 +129,18 @@
     <script src="~/admin_js/template.js"></script>
     <script src="~/admin_js/settings.js"></script>
     <script src="~/admin_js/todolist.js"></script>
-    <script src="~/admin_js/calendar.js"></script>
     <script src="~/admin_js/lib/main.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/vendors/mdi/css/materialdesignicons.min.css"></script>
+    <script src="~/Scripts/chosen/chosen.jquery.min.js"></script>
+
 
     <!-- endinject -->
     <!-- Custom js for this page-->
     <script src="~/admin_js/file-upload.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
+    @await RenderSectionAsync("Style", required: false)
+  
 
     @*<script src="~/admin_js/toastinette.js"></script>*@
     <!-- End custom js for this page-->
