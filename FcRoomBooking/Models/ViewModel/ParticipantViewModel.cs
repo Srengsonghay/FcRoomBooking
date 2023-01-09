@@ -10,7 +10,11 @@ namespace FcRoomBooking.Models.ViewModel
         public string Username { get; set; }
         public string Email { get; set; }
         public string? userId { get; set; }
+        public string? Subject { get; set; }
+        public string? Detail { get; set; }
+        
         public string? Reason { get; set; }
         public bool? IsExcept { get; set; }
+
     }
 }

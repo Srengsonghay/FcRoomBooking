@@ -98,7 +98,6 @@ namespace FcRoomBooking.Controllers
             dbContext.Participants.Update(participant);
             dbContext.SaveChanges();
             return RedirectToAction("Index");
-           
         }
     }
 }

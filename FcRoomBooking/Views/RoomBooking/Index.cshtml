@@ -1,7 +1,8 @@
-﻿@{
+@{
     Layout = "_LayoutAdmin";
 }
 @using FcRoomBooking.Models.Domain
+
 @using Microsoft.AspNetCore.Identity
 @using FcRoomBooking.Areas.Identity.Data
 @model FcRoomBooking.Models.ViewModel.CheckBookingViewModel
@@ -50,11 +51,9 @@
                 @{
                     int no = 1;
                 }
+
                 @foreach (var item in Model.RoomBooking)
                 {
-                   
-                        
-                    
                     <tr>
                         <td>
                             @no
@@ -126,4 +125,5 @@
 
     </div>
 </div>
+
 <partial name="_MessagePartail" />

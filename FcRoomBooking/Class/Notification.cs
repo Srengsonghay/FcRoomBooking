@@ -14,16 +14,17 @@ namespace FcRoomBooking.Class
         private readonly ApplicationDbContext dbContext;
         private readonly UserManager<ApplicationUser> userManager;
 
-        public Notification(ApplicationDbContext dbContext, UserManager<ApplicationUser> userManager)
+
+        public Notification(ApplicationDbContext dbContext,UserManager<ApplicationUser> userManager)
         {
             this.dbContext = dbContext;
             this.userManager = userManager;
         }
         public List<NotificationViewModel> Noti(string id)
         {
-            var noti = dbContext.Participants.Where(x => x.UserId == id).Include(x => x.RoomBooking).Include(x => x.RoomBooking.Room).Where(x => x.RoomBooking.BookingStatus == "Active").ToList();
+            var noti = dbContext.Participants.Where(x=>x.UserId == id).Include(x => x.RoomBooking).Include(x=>x.RoomBooking.Room).Where(x=>x.RoomBooking.BookingStatus=="Active").ToList();
             List<NotificationViewModel> notificationList = new List<NotificationViewModel>();
-            if (noti.Any())
+            if(noti.Any())
             {
                 foreach (var item in noti)
                 {
@@ -34,7 +35,8 @@ namespace FcRoomBooking.Class
                         bookingFrom = item.RoomBooking.BookingFrom.ToString("dd/MM/yy HH:mm tt"),
                         bookingTo = item.RoomBooking.BookingTo,
                         roomNumber = item.RoomBooking.Room.RoomName,
-                        id = item.RoomBooking.Id,
+                        id= item.RoomBooking.Id,
+
                     });
                 }
                 return notificationList;

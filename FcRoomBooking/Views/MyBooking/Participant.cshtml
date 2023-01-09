@@ -99,9 +99,17 @@
                     <span class="mdi mdi-close" ></span>
                 </button>
             </div>
-            <form asp-controller="MyBooking" asp-action="PostParticipant" method="post" asp-route-id="@ViewBag.BookingId">
+            <form asp-controller="MyBooking" asp-action="SendEmail" asp-route-id="@ViewBag.BookingId" method="post">
                 <div class="modal-body">
-                    Are you sure you want to send email to all the participants?
+                    <label for="exampleInputUsername1">Subject</label>
+                    <input type="text" class="form-control" name="Subject" required>
+                    <label for="exampleInputUsername1">Detail</label>
+                    <input type="text" class="form-control" name="Detail" required>
+
+            @*<form asp-controller="MyBooking" asp-action="PostParticipant" method="post" asp-route-id="@ViewBag.BookingId">
+                <div class="modal-body">
+                    Are you sure you want to send email to all the participants?*@
+                    
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>

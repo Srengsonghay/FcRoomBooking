@@ -1,4 +1,4 @@
-﻿@{
+@{
 	Layout = "_LayoutAdmin";
 }
 @model FcRoomBooking.Models.ViewModel.RoomBookingViewModel
@@ -56,6 +56,7 @@
                 <textarea class="form-control" style="height:100px" id="exampleInputUsername1" asp-for="Detail" required></textarea>
             </div>
             <button type="submit" asp-controller="MyBooking" asp-action="Update" asp-route-id="@Model.Id" asp-route-isCancel="false" class="btn btn-primary mr-2">Save</button>
+
             @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Booking.Delete)).Result.Succeeded)
             {
             <button type="submit" asp-controller="MyBooking" asp-action="Update" asp-route-isCancel="true" asp-route-id="@Model.Id" class="btn btn-danger">Cancel Booking</button>

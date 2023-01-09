@@ -1,4 +1,4 @@
-﻿@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Authorization
 @inject IAuthorizationService AuthorizationService
 @using FcRoomBooking.Constants
 @{
@@ -28,6 +28,7 @@
             </div>
             </div>
         </div>
+
         @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Booking.Create)).Result.Succeeded)
         {
             <a class="btn btn-outline-success float-right" asp-controller="MyBooking" asp-action="Create">Create New</a>
@@ -115,11 +116,12 @@
                             }
                         </td>
                         <td>
+
                             @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Booking.Edit)).Result.Succeeded)
                             {
                                <a class="btn btn-outline-primary p-2" asp-controller="MyBooking" asp-action="Edit" asp-route-id="@item.Id">Edit</a>   
                             }
-                            
+        
                             <a class="btn btn-outline-info p-2" asp-controller="MyBooking" asp-action="Participant" asp-route-id="@item.Id">Participant</a>
                         </td>
                     </tr>

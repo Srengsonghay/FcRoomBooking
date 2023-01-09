@@ -1,4 +1,4 @@
-﻿@{
+@{
     Layout = "_LayoutAdmin";
 }
 @using FcRoomBooking.Models.ViewModel
@@ -43,6 +43,7 @@
                             <td>
                                 @item.Email
                             </td>
+
                             <td>
                                 @if(item.IsExcept == true)
                                 {
@@ -60,7 +61,6 @@
                                 }
                                 
                             </td>
-                            
                         </tr>
                         no++;
                     }
